@@ -28,56 +28,33 @@
 
 @implementation TestFlightLogger
 
-static TestFlightLogger *sharedInstance;
-
-+ (void)initialize
-{
-	static BOOL initialized = NO;
-	if (!initialized)
-	{
-		initialized = YES;
-		
-		sharedInstance = [[TestFlightLogger alloc] init];
-	}
++ (TestFlightLogger *)sharedInstance {
+    static TestFlightLogger *instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[TestFlightLogger alloc] init];
+    });
+    return instance;
 }
 
-+ (TestFlightLogger *)sharedInstance
-{
-	return sharedInstance;
+- (id)init {
+    self = [super init];
+    if (self) {
+        [TestFlight setOptions:@{ TFOptionLogToConsole: @NO }];
+        [TestFlight setOptions:@{ TFOptionLogToSTDERR:  @NO }];
+	}
+    return self;
 }
 
-- (id)init
-{
-	if (sharedInstance != nil)
-	{
-		return nil;
-	}
-	
-	if (self = [super init])
-	{
-        NSMutableDictionary *options = [NSMutableDictionary dictionary];
-        [options setValue:[NSNumber numberWithBool:NO] forKey:@"logToConsole"];
-        [options setValue:[NSNumber numberWithBool:NO] forKey:@"logToSTDERR"];
-        [TestFlight setOptions:options];
-	}
-	return self;
-}
-
-- (void)logMessage:(DDLogMessage *)logMessage
-{
-    NSString *logMsg = logMessage->logMsg;
+- (void)logMessage:(DDLogMessage *)logMessage {
+    NSString *logMsg = (formatter ? [formatter formatLogMessage:logMessage] : logMessage->logMsg);
     
-    if (formatter)
-        logMsg = [formatter formatLogMessage:logMessage];
-    
-    if (logMsg)
-    {
-        TFLog(logMsg);
+    if (logMsg) {
+        TFLog(@"%@", logMsg);
     }
 }
 
-- (NSString *)loggerName
-{
+- (NSString *)loggerName {
 	return @"cocoa.lumberjack.testflightlogger";
 }
 
