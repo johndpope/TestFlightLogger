@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TestFlightLogger"
-  s.version      = “0.0.3”
+  s.version      = "0.0.3"
   s.summary      = "A CocoaLumberjack logger for TestFlight."
   s.homepage     = "https://github.com/abillingsley/TestFlightLogger"
   s.license      = 'MIT'
