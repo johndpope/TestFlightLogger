@@ -27,7 +27,9 @@
  **/
 
 @interface TestFlightLogger : DDAbstractLogger <DDLogger>
+@property (nonatomic, readonly) BOOL running;
 
 + (TestFlightLogger *)sharedInstance;
-
+- (void)start;
+- (void)stop;
 @end

@@ -22,9 +22,16 @@
 #import "TestFlightLogger.h"
 #import "TestFlight.h"
 
-#if ! __has_feature(objc_arc)
+#if !__has_feature(objc_arc)
 #warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
 #endif
+
+@interface TestFlightLogger ()
+
+@property (nonatomic, assign) BOOL running;
+
+@end
+
 
 @implementation TestFlightLogger
 
@@ -42,20 +49,60 @@
     if (self) {
         [TestFlight setOptions:@{ TFOptionLogToConsole: @NO }];
         [TestFlight setOptions:@{ TFOptionLogToSTDERR:  @NO }];
-	}
+    }
     return self;
 }
 
+- (void)start {
+    if (self.running) {
+        return;
+    }
+    //  LoggerStart(NULL);
+    self.running = YES;
+}
+
+- (void)stop {
+    if (!self.running) {
+        return;
+    }
+    // LoggerStop(NULL);
+    self.running = NO;
+}
+
 - (void)logMessage:(DDLogMessage *)logMessage {
-    NSString *logMsg = (formatter ? [formatter formatLogMessage:logMessage] : logMessage->logMsg);
+    NSString *logMsg = (self.logFormatter ? [self.logFormatter formatLogMessage:logMessage] : logMessage->_message);
+    
+    
+    if (self.logFormatter) {
+        // formatting is supported but not encouraged!
+        if (logMsg) {
+            logMsg = [self.logFormatter formatLogMessage:logMessage];
+            TFLog(@"%@", logMsg);
+        }
+    }
     
     if (logMsg) {
-        TFLog(@"%@", logMsg);
+        //        int nsloggerLogLevel;
+        //        switch (logMessage.flag) {
+        //                // NSLogger log levels start a 0, the bigger the number,
+        //                // the more specific / detailed the trace is meant to be
+        //            case LOG_FLAG_ERROR: nsloggerLogLevel = 0; break;
+        //
+        //            case LOG_FLAG_WARN: nsloggerLogLevel  = 1; break;
+        //
+        //            case LOG_FLAG_INFO: nsloggerLogLevel  = 2; break;
+        //
+        //            default: nsloggerLogLevel             = 3; break;
+        //        }
+        //
+        /*LogMessageF(logMessage->file, logMessage->lineNumber, logMessage->function, [logMessage fileName],
+         nsloggerLogLevel, @"%@", logMsg);*/
+        //TFLog(@"%@", logMsg);
     }
 }
 
 - (NSString *)loggerName {
-	return @"cocoa.lumberjack.testflightlogger";
+    return @"cocoa.lumberjack.testflightlogger";
 }
 
 @end
