@@ -33,10 +33,7 @@ Here's an example podfile that installs TestFlightLogger and its dependencies
 ### Podfile
 
 ```bash
-platform :ios, '5.0'
-
-pod 'TestFlightLogger'
-
+pod 'TestFlightLogger', :git => 'https://github.com/johndpope/TestFlightLogger.git', :commit => '1a293accfbf1a164e4c397c72787cfa0a3a0ce50'
 ```
 
 ## License
