@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/abillingsley/TestFlightLogger"
   s.license      = 'MIT'
   s.author       = { "Alex Billingsley" => "abillingsley@dyknow.com" }
-  s.source   	 = { :git => 'https://github.com/johndpope/TestFlightLogger.git', :commit => '4455669ab49865e2af413044c4862aa6349627aa' }  	
+  s.source   	 = { :git => 'https://github.com/johndpope/TestFlightLogger.git', :commit => '437e3763292f4357459b7ffc271cbd33382914bb' }  	
   s.source_files = '*.{h,m}'
   s.requires_arc = true
   s.platform = :ios
