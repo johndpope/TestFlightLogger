@@ -70,35 +70,14 @@
 }
 
 - (void)logMessage:(DDLogMessage *)logMessage {
-    NSString *logMsg = (self.logFormatter ? [self.logFormatter formatLogMessage:logMessage] : logMessage->_message);
-    
-    
-    if (self.logFormatter) {
+    NSString *logMsg = @"";
+    if (formatter != nil) {
         // formatting is supported but not encouraged!
-        if (logMsg) {
-            logMsg = [self.logFormatter formatLogMessage:logMessage];
-            TFLog(@"%@", logMsg);
+        if (logMessage) {
+            logMsg = [formatter formatLogMessage:logMessage];
         }
     }
-    
-    if (logMsg) {
-        //        int nsloggerLogLevel;
-        //        switch (logMessage.flag) {
-        //                // NSLogger log levels start a 0, the bigger the number,
-        //                // the more specific / detailed the trace is meant to be
-        //            case LOG_FLAG_ERROR: nsloggerLogLevel = 0; break;
-        //
-        //            case LOG_FLAG_WARN: nsloggerLogLevel  = 1; break;
-        //
-        //            case LOG_FLAG_INFO: nsloggerLogLevel  = 2; break;
-        //
-        //            default: nsloggerLogLevel             = 3; break;
-        //        }
-        //
-        /*LogMessageF(logMessage->file, logMessage->lineNumber, logMessage->function, [logMessage fileName],
-         nsloggerLogLevel, @"%@", logMsg);*/
-        //TFLog(@"%@", logMsg);
-    }
+    TFLog(@"%@", logMsg);
 }
 
 - (NSString *)loggerName {
